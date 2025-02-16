@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Price Tracker</h1>
+
+        <div class="crypto-dropdown">
+            <div class="dropdown-header" onclick="toggleDropdown('eth')">
+                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="Ethereum" class="crypto-logo">
+                <span>Ethereum (ETH)</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="dropdown-content" id="ethDropdown">
+                <p><strong>ETH/USD:</strong> <span id="ethPrice">Loading...</span></p>
+            </div>
+        </div>
+
+        <div class="crypto-dropdown">
+            <div class="dropdown-header" onclick="toggleDropdown('btc')">
+                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="Bitcoin" class="crypto-logo">
+                <span>Bitcoin (BTC)</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="dropdown-content" id="btcDropdown">
+                <p><strong>BTC/USD:</strong> <span id="btcPrice">Loading...</span></p>
+            </div>
+        </div>
+
+        <button onclick="fetchPrices()">🔄 Refresh Prices</button>
+
+        <hr>
+
+        <h2>Wallet</h2>
+        <select id="walletOptions" onchange="fetchBalance()">
+            <option value="">Select an action</option>
+            <option value="balance">Check Balance</option>
+        </select>
+        <p><strong>Wallet Balance:</strong> <span id="walletBalance">-</span> ETH</p>
+
+        <p id="error" class="error"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
