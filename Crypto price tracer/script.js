@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = "0xB17F55116Cb13FcDA402De7c9e89C9B9d737A7b6"; // Replace with your contract address
+const CONTRACT_ADDRESS = "YOUR CONTRACT DEPLOYED ADDRESS"; 
 const CONTRACT_ABI = [
     {
         "inputs": [],
@@ -36,18 +36,18 @@ async function fetchPrices() {
             return;
         }
 
-        // Request account access
+        
         await window.ethereum.request({ method: "eth_requestAccounts" });
 
-        // Connect to Ethereum
+    
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
-        // Fetch ETH and BTC prices
+        
         const ethPriceRaw = await contract.getLatestETHPrice();
         const btcPriceRaw = await contract.getLatestBTCPrice();
 
-        // Convert Chainlink price (8 decimals)
+    
         document.getElementById("ethPrice").innerText = `$${(Number(ethPriceRaw) / 10 ** 8).toFixed(2)}`;
         document.getElementById("btcPrice").innerText = `$${(Number(btcPriceRaw) / 10 ** 8).toFixed(2)}`;
     } catch (err) {
@@ -65,11 +65,11 @@ async function fetchBalance() {
         const selectedOption = document.getElementById("walletOptions").value;
         if (selectedOption !== "balance") return;
 
-        // Request account access
+    
         const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-        // Get balance
+    
         const balance = await provider.getBalance(accounts[0]);
         const balanceInEth = ethers.utils.formatEther(balance);
 
@@ -79,5 +79,4 @@ async function fetchBalance() {
     }
 }
 
-// Fetch prices when the page loads
 window.onload = fetchPrices;
