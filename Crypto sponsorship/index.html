@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Sponsorship</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Crypto Sponsorship</h2>
+        <div class="wallet-status">Wallet: Not Connected</div>
+        <input type="text" id="name" placeholder="Your Name">
+        <input type="text" id="message" placeholder="Message">
+        <input type="number" id="amount" placeholder="Amount in ETH">
+        <button onclick="buyCryptoSponsorship()">Send Sponsorship</button>
+        <p class="loading" id="loading" style="display: none;">Processing transaction...</p>
+        <h3>Transaction History</h3>
+        <div id="memos"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
