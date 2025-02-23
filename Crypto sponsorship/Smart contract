@@ -1,0 +1,63 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Coffee {
+    struct Memo {
+        string name;
+        string message;
+        uint256 timestamp;
+        address from;
+        uint256 amount;
+    }
+
+    address payable public owner;
+    uint256 public totalBalanceReceived; 
+    Memo[] public memos;
+
+    event NewMemo(
+        string name,
+        string message,
+        uint256 timestamp,
+        address indexed from,
+        uint256 amount
+    );
+
+    event FundsTransferred(address indexed to, uint256 amount);
+
+    constructor() {
+        owner = payable(msg.sender);
+    }
+
+    function buyCoffee(string calldata name, string calldata message) public payable {
+        require(msg.value > 0, "You must pay some Ether to buy coffee.");
+        require(bytes(name).length > 0, "Name cannot be empty.");
+        require(bytes(message).length > 0, "Message cannot be empty.");
+
+    
+        memos.push(Memo(name, message, block.timestamp, msg.sender, msg.value));
+
+        emit NewMemo(name, message, block.timestamp, msg.sender, msg.value);
+
+        (bool success, ) = owner.call{value: msg.value}("");
+        require(success, "Transfer to owner failed.");
+
+        emit FundsTransferred(owner, msg.value);
+    }
+
+    function getMemos() public view returns (Memo[] memory) {
+        return memos;
+    }
+
+    function setOwner(address payable newOwner) public {
+        require(msg.sender == owner, "Only the owner can perform this action.");
+        require(newOwner != address(0), "New owner address cannot be zero.");
+        owner = newOwner;
+    }
+
+    receive() external payable {
+        totalBalanceReceived += msg.value;
+
+        (bool success, ) = owner.call{value: msg.value}("");
+        require(success, "Fallback transfer to owner failed.");
+    }
+}
