@@ -1,4 +1,4 @@
-const API_URL = "https://eth-mainnet.g.alchemy.com/v2/LW_0eKUleepdRPITppJ8FTNtNVICMvw-"; 
+const API_URL = "YOUR API KEY URL"; 
 const gasData = { labels: [], gasUsed: [] };
 const ctx = document.getElementById("gasChart").getContext("2d");
 
