@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Ether Transfer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="container">
+        <h2>Web3 Ether Transfer</h2>
+        <p class="balance" id="senderBalance">Sender Balance: </p>
+        <p class="balance" id="receiverBalance">Receiver Balance: </p>
+
+        <input type="text" id="senderAddress" placeholder="Enter Sender Address" oninput="fetchBalance('sender'); estimateGasFee();">
+        <input type="text" id="receiverAddress" placeholder="Enter Receiver Address" oninput="fetchBalance('receiver'); estimateGasFee();">
+        <input type="text" id="etherAmount" placeholder="Enter Amount (ETH)" oninput="estimateGasFee();">
+
+        <p id="gasFee">Estimated Gas Fee</p>
+
+        <button onclick="confirmTransaction()">Send Transaction</button>
+        <button onclick="clearFields()">Clear</button>
+
+        <p id="status" class="message"></p>
+
+        <h3>Transaction History</h3>
+        <div id="history"></div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <h3>Confirm Transaction</h3>
+        <p>Are you sure you want to send <span id="modalAmount"></span> ETH?</p>
+        <button class="confirm-btn" onclick="sendTransaction()">Confirm</button>
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+
