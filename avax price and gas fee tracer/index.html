@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AVAX Price & Gas Fee Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f0f0f;
+      color: #f5f5f5;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #ff5f00;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 95, 0, 0.4);
+    }
+    .toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle h2 {
+      margin: 0;
+      color: #ffae42;
+    }
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+    .arrow.rotate {
+      transform: rotate(90deg);
+    }
+    .price-content {
+      margin-top: 1rem;
+      display: none;
+    }
+    .price-content.active {
+      display: block;
+    }
+    #avax-price {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+    canvas {
+      margin-top: 2rem;
+      height: 300px !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔥 AVAX Tracker</h1>
+    <div class="card">
+      <div class="toggle" onclick="togglePrice()">
+        <h2>Current AVAX Price (USD)</h2>
+        <span class="arrow" id="arrow">▶</span>
+      </div>
+      <div class="price-content" id="price-container">
+        <p id="avax-price">Loading...</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="color: #ffae42">Gas Used by Latest 10 Blocks</h2>
+      <canvas id="gasChart"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const priceEl = document.getElementById("avax-price");
+    const ctx = document.getElementById("gasChart").getContext("2d");
+    const priceContainer = document.getElementById("price-container");
+    const arrow = document.getElementById("arrow");
+
+    function togglePrice() {
+      priceContainer.classList.toggle("active");
+      arrow.classList.toggle("rotate");
+    }
+
+    let gasChart;
+
+    async function fetchAvaxPrice() {
+      try {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=usd");
+        const data = await res.json();
+        const price = data["avalanche-2"]?.usd;
+        if (price !== undefined) {
+          priceEl.textContent = `$${price}`;
+        } else {
+          priceEl.textContent = "Price data not available";
+        }
+      } catch (err) {
+        priceEl.textContent = "Error fetching price";
+        console.error(err);
+      }
+    }
+
+    async function fetchGasUsage() {
+      try {
+        const provider = new ethers.providers.JsonRpcProvider("https://api.avax-test.network/ext/bc/C/rpc");
+        const latestBlockNumber = await provider.getBlockNumber();
+        const labels = [];
+        const gasUsedData = [];
+
+        for (let i = 9; i >= 0; i--) {
+          const block = await provider.getBlock(latestBlockNumber - i);
+          labels.push(block.number.toString());
+          gasUsedData.push(parseInt(block.gasUsed.toString()));
+        }
+
+        if (gasChart) {
+          gasChart.data.labels = labels;
+          gasChart.data.datasets[0].data = gasUsedData;
+          gasChart.update();
+        } else {
+          gasChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Gas Used",
+                  data: gasUsedData,
+                  backgroundColor: "rgba(255, 95, 0, 0.6)",
+                  borderColor: "rgba(255, 95, 0, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  labels: { color: '#fff' }
+                },
+              },
+              scales: {
+                x: {
+                  ticks: { color: '#fff' },
+                  grid: { color: '#333' }
+                },
+                y: {
+                  ticks: { color: '#fff' },
+                  grid: { color: '#333' }
+                }
+              }
+            },
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching gas usage:", err);
+      }
+    }
+
+    fetchAvaxPrice();
+    fetchGasUsage();
+    setInterval(() => {
+      fetchAvaxPrice();
+      fetchGasUsage();
+    }, 15000);
+  </script>
+</body>
+</html>
