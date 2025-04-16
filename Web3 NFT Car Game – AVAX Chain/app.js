@@ -1,4 +1,3 @@
-// Contract ABI
 const contractABI = [
 	{
 		"inputs": [],
@@ -257,46 +256,43 @@ const contractABI = [
 	}
 ];
 
-// Contract address - Replace with your deployed contract address
-const contractAddress = '0x37A4786276bDaA20C25acB8FaAaB42E1cf9577B0';
+const contractAddress = 'YOUR SMART CONTRACT DEPLOY ADDRESS PASTE HERE';
 
 let web3;
 let contract;
 let accounts = [];
 let selectedCar = null;
 
-// Initialize Web3 and contract
 async function init() {
 	if (typeof window.ethereum !== 'undefined') {
 		try {
-			// Request account access
 			accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 			console.log('Connected accounts:', accounts);
 			
-			// Initialize Web3
+			
 			web3 = new Web3(window.ethereum);
 			
-			// Validate contract address
+			
 			if (!web3.utils.isAddress(contractAddress)) {
 				throw new Error('Invalid contract address');
 			}
 			
-			// Initialize contract
+			
 			contract = new web3.eth.Contract(contractABI, contractAddress);
 			console.log('Contract initialized:', contract);
 			
-			// Update UI
+			
 			updateWalletStatus();
 			loadOwnedCars();
 			
-			// Listen for account changes
+			
 			window.ethereum.on('accountsChanged', (newAccounts) => {
 				accounts = newAccounts;
 				updateWalletStatus();
 				loadOwnedCars();
 			});
 			
-			// Listen for chain changes
+			
 			window.ethereum.on('chainChanged', () => {
 				window.location.reload();
 			});
@@ -310,7 +306,6 @@ async function init() {
 	}
 }
 
-// Update wallet connection status
 function updateWalletStatus() {
 	const walletStatus = document.getElementById('wallet-status');
 	if (accounts.length > 0) {
@@ -320,7 +315,6 @@ function updateWalletStatus() {
 	}
 }
 
-// Load user's owned cars
 async function loadOwnedCars() {
 	if (!contract || !accounts[0]) return;
 	
@@ -332,7 +326,7 @@ async function loadOwnedCars() {
 		console.log('User balance:', balance);
 		
 		for (let i = 0; i < balance; i++) {
-			const tokenId = i + 1; // Since we're using sequential IDs
+			const tokenId = i + 1; 
 			try {
 				const carStats = await contract.methods.getCarStats(tokenId).call();
 				console.log('Car stats:', carStats);
@@ -350,7 +344,7 @@ async function loadOwnedCars() {
 				ownedCarsDiv.appendChild(carCard);
 			} catch (error) {
 				console.error(`Error loading car ${tokenId}:`, error);
-				continue; // Skip this car and continue with the next one
+				continue; 
 			}
 		}
 	} catch (error) {
@@ -358,13 +352,12 @@ async function loadOwnedCars() {
 	}
 }
 
-// Handle car selection
+
 function selectCar(tokenId) {
 	selectedCar = tokenId;
 	alert(`Car #${tokenId} selected for racing!`);
 }
 
-// Handle minting new car
 document.getElementById('mint-form').addEventListener('submit', async (e) => {
 	e.preventDefault();
 	
@@ -396,14 +389,11 @@ document.getElementById('mint-form').addEventListener('submit', async (e) => {
 		alert('Error minting car: ' + error.message);
 	}
 });
-
-// Race track initialization
 const canvas = document.getElementById('race-track');
 const ctx = canvas.getContext('2d');
-canvas.width = 600; // Doubled width
-canvas.height = 600; // Same height
+canvas.width = 600; 
+canvas.height = 600; 
 
-// Car physics and controls
 class Car {
 	constructor(x, y, width, height, color) {
 		this.x = x;
@@ -419,7 +409,6 @@ class Car {
 		this.turnSpeed = 0.03;
 		this.controls = new Controls();
 		
-		// Load car image
 		this.image = new Image();
 		this.image.src = 'images\\player.png';
 		this.image.onerror = () => {
@@ -429,7 +418,6 @@ class Car {
 	}
 
 	update() {
-		// Handle acceleration and deceleration
 		if (this.controls.forward) {
 			this.speed += this.acceleration;
 		}
@@ -437,7 +425,6 @@ class Car {
 			this.speed -= this.acceleration;
 		}
 
-		// Handle turning
 		if (this.speed !== 0) {
 			const flip = this.speed > 0 ? 1 : -1;
 			if (this.controls.left) {
@@ -448,7 +435,6 @@ class Car {
 			}
 		}
 
-		// Apply friction
 		if (this.speed > 0) {
 			this.speed -= this.friction;
 		}
@@ -459,7 +445,6 @@ class Car {
 			this.speed = 0;
 		}
 
-		// Limit speed
 		if (this.speed > this.maxSpeed) {
 			this.speed = this.maxSpeed;
 		}
@@ -467,25 +452,21 @@ class Car {
 			this.speed = -this.maxSpeed/2;
 		}
 
-		// Calculate new position
 		const newX = this.x - Math.sin(this.angle) * this.speed;
 		const newY = this.y - Math.cos(this.angle) * this.speed;
 
-		// Check track boundaries
-		const trackPadding = 50; // Same as track boundary padding
+		const trackPadding = 50; 
 		const carHalfWidth = this.width / 2;
 		const carHalfHeight = this.height / 2;
 
-		// Check if new position is within track boundaries
 		if (newX - carHalfWidth >= trackPadding && 
 			newX + carHalfWidth <= canvas.width - trackPadding && 
 			newY - carHalfHeight >= trackPadding && 
 			newY + carHalfHeight <= canvas.height - trackPadding) {
-			// Update position if within boundaries
+		
 			this.x = newX;
 			this.y = newY;
 		} else {
-			// If outside boundaries, stop the car
 			this.speed = 0;
 		}
 	}
@@ -504,7 +485,6 @@ class Car {
 				this.height
 			);
 		} else {
-			// Draw default car shape if image fails to load
 			ctx.fillStyle = this.color;
 			ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
 		}
@@ -572,14 +552,13 @@ class Controls {
 class EnemyCar extends Car {
 	constructor(x, y, width, height) {
 		super(x, y, width, height, '#D2B48C');
-		this.speed = 4.5; // Increased from 3.5
+		this.speed = 4.5; 
 		this.direction = Math.random() * Math.PI * 2;
 		this.changeDirectionTimer = 0;
 		this.maxChangeDirectionTime = 50;
 		this.turnSpeed = 0.05;
 		this.chaseDistance = 300;
 		
-		// Load enemy car image
 		this.image = new Image();
 		this.image.src = 'images\\enemy.png';
 		this.image.onerror = () => {
@@ -591,41 +570,34 @@ class EnemyCar extends Car {
 	update() {
 		if (!car) return;
 
-		// Calculate distance to player car
 		const dx = car.x - this.x;
 		const dy = car.y - this.y;
 		const distance = Math.sqrt(dx * dx + dy * dy);
 
-		// If player is within chase distance, chase them
 		if (distance < this.chaseDistance) {
-			// Calculate angle to player
 			const targetAngle = Math.atan2(dy, dx);
 			
-			// Smoothly turn towards player
 			this.direction = this.lerp(this.direction, targetAngle, 0.1);
 			
-			// Increase speed when chasing
-			this.speed = 5.5; // Increased from 4.5
+			this.speed = 5.5; 
 		} else {
-			// Random movement when far from player
+			
 			this.changeDirectionTimer++;
 			if (this.changeDirectionTimer >= this.maxChangeDirectionTime) {
 				const targetDirection = Math.random() * Math.PI * 2;
 				this.direction = this.lerp(this.direction, targetDirection, 0.1);
 				this.changeDirectionTimer = 0;
-				this.speed = 4.5; // Increased from 3.5
+				this.speed = 4.5; 
 			}
 		}
 
-		// Smooth movement
+		
 		const targetX = this.x + Math.cos(this.direction) * this.speed;
 		const targetY = this.y + Math.sin(this.direction) * this.speed;
 
-		// Smooth position update
 		this.x = this.lerp(this.x, targetX, 0.1);
 		this.y = this.lerp(this.y, targetY, 0.1);
 
-		// Keep enemy cars within track boundaries with smooth bouncing
 		if (this.x < 50) {
 			this.x = 50;
 			this.direction = Math.PI - this.direction;
@@ -643,11 +615,9 @@ class EnemyCar extends Car {
 			this.direction = -this.direction;
 		}
 
-		// Smooth angle update
 		this.angle = this.lerp(this.angle, this.direction, 0.1);
 	}
 
-	// Linear interpolation for smooth transitions
 	lerp(start, end, amt) {
 		return (1 - amt) * start + amt * end;
 	}
@@ -666,7 +636,7 @@ class EnemyCar extends Car {
 				this.height
 			);
 		} else {
-			// Draw default car shape if image fails to load
+			
 			ctx.fillStyle = this.color;
 			ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
 		}
@@ -675,7 +645,6 @@ class EnemyCar extends Car {
 	}
 }
 
-// Race game logic
 let raceInProgress = false;
 let car = null;
 let enemyCars = [];
@@ -695,7 +664,6 @@ function startRace() {
 	document.getElementById('score').textContent = '0';
 	document.getElementById('scoreboard').style.display = 'block';
 	
-	// Start score counter
 	scoreInterval = setInterval(() => {
 		if (raceInProgress && !gameOver) {
 			score++;
@@ -710,43 +678,35 @@ function startRace() {
 		75,
 		'#f00'
 	);
-
-	// Create 2 enemy cars with different starting positions and directions
 	enemyCars = [];
-	
-	// First enemy car - comes from top-left
 	const enemy1 = new EnemyCar(
-		100, // x position near left edge
-		100, // y position near top edge
+		100, 
+		100, 
 		45,
 		75
 	);
-	enemy1.direction = Math.PI / 4; // 45 degrees (down-right)
+	enemy1.direction = Math.PI / 4; 
 	enemyCars.push(enemy1);
 	
-	// Second enemy car - comes from bottom-right
 	const enemy2 = new EnemyCar(
-		canvas.width - 100, // x position near right edge
-		canvas.height - 100, // y position near bottom edge
+		canvas.width - 100, 
+		canvas.height - 100, 
 		45,
 		75
 	);
-	enemy2.direction = (5 * Math.PI) / 4; // 225 degrees (up-left)
+	enemy2.direction = (5 * Math.PI) / 4; 
 	enemyCars.push(enemy2);
 
-	// Initialize car images
 	const playerCarImage = new Image();
 	playerCarImage.src = 'images\\player.png';
 	
 	const enemyCarImage = new Image();
 	enemyCarImage.src = 'images\\enemy.png';
 	
-	// Wait for images to load
 	Promise.all([
 		new Promise(resolve => playerCarImage.onload = resolve),
 		new Promise(resolve => enemyCarImage.onload = resolve)
 	]).then(() => {
-		// Start the game loop
 		requestAnimationFrame(gameLoop);
 	}).catch(error => {
 		console.error('Error loading images:', error);
@@ -755,7 +715,6 @@ function startRace() {
 }
 
 function checkCollision(car1, car2) {
-	// Simple rectangle collision detection
 	const dx = car1.x - car2.x;
 	const dy = car1.y - car2.y;
 	const distance = Math.sqrt(dx * dx + dy * dy);
@@ -765,33 +724,26 @@ function checkCollision(car1, car2) {
 function gameLoop() {
 	if (!raceInProgress || gameOver) return;
 	
-	// Clear canvas
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
-	// Draw track
 	ctx.fillStyle = '#333';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	// Draw track boundaries
 	ctx.strokeStyle = '#fff';
 	ctx.lineWidth = 5;
 	const trackPadding = 50;
 	ctx.strokeRect(trackPadding, trackPadding, canvas.width - 2 * trackPadding, canvas.height - 2 * trackPadding);
 	
-	// Draw finish line
 	ctx.fillStyle = '#fff';
 	ctx.fillRect(canvas.width - 20, trackPadding, 2, canvas.height - 2 * trackPadding);
 	
-	// Update and draw player car
 	car.update();
 	car.draw();
 
-	// Update and draw enemy cars
 	for (let enemy of enemyCars) {
 		enemy.update();
 		enemy.draw();
 
-		// Check for collision with player car
 		if (checkCollision(car, enemy)) {
 			gameOver = true;
 			raceInProgress = false;
@@ -814,6 +766,4 @@ document.getElementById('reset-race').addEventListener('click', () => {
 	document.getElementById('scoreboard').style.display = 'none';
 	canvas.height = canvas.offsetHeight;
 });
-
-// Initialize the application
 window.addEventListener('load', init); 
