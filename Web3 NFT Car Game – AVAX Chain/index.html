@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌐 Blockchain Meets Speed - Fuel the Chain</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Web3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <!-- MetaMask Provider -->
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    <!-- OpenZeppelin Contracts (for reference) -->
+    <script src="https://cdn.jsdelivr.net/npm/@openzeppelin/contracts@4.8.0/build/contracts/ERC721.json"></script>
+    <!-- Preload Images -->
+    <link rel="preload" as="image" href="images\player.png">
+    <link rel="preload" as="image" href="images\enemy.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AVAX Nitro Racers - Fuel the Chain</h1>
+            <div id="wallet-status">Connect Wallet</div>
+        </header>
+        
+        <main>
+            <div class="game-section">
+                <div id="car-selection">
+                    <h2>Your Cars</h2>
+                    <div id="owned-cars"></div>
+                </div>
+                
+                <div id="mint-section">
+                    <h2>Mint New Car</h2>
+                    <form id="mint-form">
+                        <div class="form-group">
+                            <label for="speed">Speed (1-10):</label>
+                            <input type="number" id="speed" min="1" max="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="acceleration">Acceleration (1-10):</label>
+                            <input type="number" id="acceleration" min="1" max="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="handling">Handling (1-10):</label>
+                            <input type="number" id="handling" min="1" max="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Color:</label>
+                            <input type="color" id="color" required>
+                        </div>
+                        <button type="submit">Mint Car (0.1 AVAX)</button>
+                    </form>
+                </div>
+                
+                <div id="race-section">
+                    <h2>Race Track</h2>
+                    <div id="scoreboard" style="display: none;">
+                        <h3>Score: <span id="score">0</span></h3>
+                    </div>
+                    <canvas id="race-track"></canvas>
+                    <div id="race-controls">
+                        <button id="start-race">Start Race</button>
+                        <button id="reset-race">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 

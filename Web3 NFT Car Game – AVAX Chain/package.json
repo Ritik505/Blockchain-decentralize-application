@@ -1,0 +1,6 @@
+{
+  "name": "blockchain-car-game",
+  "version": "1.0.0",
+  "description": "A blockchain-based car racing game on Avalanche",
+  "main": "index.html"
+} 
