@@ -39,7 +39,7 @@ contract LotteryContract {
     }
     
     constructor() {
-        manager = 0x4550Ac76DC759A4F9AA71b8552582b96D06F516d;
+        manager = YOUR MANAGER ACCOUNT ADDRESS;
     }
     
     function startGame(address[3] memory _participants) external onlyManager {
