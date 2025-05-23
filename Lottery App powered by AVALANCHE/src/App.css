@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, #0f2027, #2c5364, #00c6fb 100%);
+    color: #eaf6fb;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 960px;
+    margin: 50px auto;
+    padding: 35px;
+    background: rgba(24, 40, 72, 0.7);
+    box-shadow: 0 15px 40px rgba(0, 198, 251, 0.08);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(0, 198, 251, 0.15);
+}
+
+h1, h2, h3 {
+    color: #eaf6fb;
+    z-index: 1;
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #00c6fb;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 12px #00c6fb33;
+}
+
+h2 {
+    margin: 30px 0 20px;
+    font-size: 1.6rem;
+    border-bottom: 2px solid #00c6fb44;
+    padding-bottom: 10px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 18px #00c6fb33;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px) scale(1.04);
+    background: linear-gradient(90deg, #005bea 0%, #00c6fb 100%);
+    box-shadow: 0 8px 24px #00c6fb55;
+}
+
+button:disabled {
+    background: #3a5068;
+    color: #b2d8e6;
+    cursor: not-allowed;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid #00c6fb55;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    background: rgba(44, 83, 100, 0.25);
+    color: #eaf6fb;
+    box-shadow: 0 2px 8px #00c6fb11;
+}
+
+input[type="text"]:focus {
+    border-color: #00c6fb;
+    outline: none;
+    background: rgba(44, 83, 100, 0.35);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.selected {
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 0 10px #00c6fb77;
+}
+
+#manager-section,
+#status-section,
+.selection-area,
+#winner-display {
+    background: rgba(24, 40, 72, 0.85);
+    color: #eaf6fb;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    border-left: 5px solid #00c6fb;
+    box-shadow: 0 4px 24px #00c6fb22;
+    backdrop-filter: blur(6px);
+}
+
+#winner-display {
+    border-left-color: #00c6fb;
+    background: linear-gradient(90deg, rgba(0,198,251,0.12), rgba(24,40,72,0.85));
+}
+
+#status-message {
+    font-style: italic;
+    color: #b2d8e6;
+}
+
+.participants {
+    margin-top: 30px;
+}
+
+.participant {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(44, 83, 100, 0.25);
+    padding: 16px 24px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 12px #00c6fb11;
+}
+
+.ticket-status {
+    font-weight: bold;
+    color: #00c6fb;
+    margin-left: 12px;
+}
+
+.number-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.number-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 18px;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.number-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.number-btn.selected {
+    background-color: #4CAF50;
+    color: white;
+    transform: scale(1.1);
+}
+
+.number-btn:disabled {
+    background-color: #cccccc;
+    border-color: #999999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.selected-number {
+    font-weight: bold;
+    color: #4CAF50;
+    font-size: 1.2em;
+}
+
+.selection-area {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.selection-summary {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.selection-summary p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+#start-game {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    margin-top: 20px;
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
+    box-shadow: 0 6px 20px #00c6fb33;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .number-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .participant {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+.loading-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(24, 40, 72, 0.7);
+    border-radius: 14px;
+    margin: 30px 0;
+    animation: pulse 1.5s infinite;
+    color: #00c6fb;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.helper-text {
+    margin-bottom: 20px;
+    color: #b2d8e6;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.helper-text code {
+    background: rgba(0,198,251,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: #00c6fb;
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.use-current-btn {
+    padding: 0 12px;
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
+    white-space: nowrap;
+    font-size: 12px;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px #00c6fb22;
+}
+
+.use-current-btn:hover {
+    background: linear-gradient(90deg, #005bea 0%, #00c6fb 100%);
+}
+
+.processing {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+#determine-winner {
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
+    margin-top: 20px;
+    color: #fff;
+    box-shadow: 0 6px 20px #00c6fb33;
+}
+
+#determine-winner:hover {
+    background: linear-gradient(90deg, #005bea 0%, #00c6fb 100%);
+}
