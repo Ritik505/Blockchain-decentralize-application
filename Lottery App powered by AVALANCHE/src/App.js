@@ -17,7 +17,7 @@ function App() {
   const [participants, setParticipants] = useState([]);
   const [statusMessage, setStatusMessage] = useState('Welcome to the Blockchain Lottery!');
 
-  const contractAddress = '0xCb2E272f63ae1C90ca288b3B314Dc1b052f3BaD5';
+  const contractAddress = 'YOUR SMART CONTRACT DEPLOY ADDRESS';
   const contractABI = [
     {
       "inputs": [],
