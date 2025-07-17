@@ -8,7 +8,7 @@ contract AnalyzerAccess {
     event Paid(address indexed user, uint256 amount);
 
     constructor() {
-        owner = 0x4550Ac76DC759A4F9AA71b8552582b96D06F516d;
+        owner = OWNER ADDRESS;
     }
 
     function payToAnalyze() external payable {
