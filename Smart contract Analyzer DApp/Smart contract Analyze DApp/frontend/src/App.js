@@ -19,7 +19,7 @@ import {
 
 import './App.css';
 
-const CONTRACT_ADDRESS = '0x2C2977812AAb1F20cB8F53a8EB4D34140ddb534d';
+const CONTRACT_ADDRESS = 'CONTRACT ADDRESS';
 const CONTRACT_ABI = [
   "function payToAnalyze() external payable",
   "function owner() external view returns (address)",
