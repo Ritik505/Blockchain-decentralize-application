@@ -523,7 +523,7 @@ function App() {
                   const networkId = await web3Instance.eth.net.getId();
                   console.log("Connected to network ID:", networkId);
                   
-                  // Check for both Ethereum and Avalanche networks
+                
                   const supportedNetworks = {
                     1: 'Ethereum Mainnet',
                     3: 'Ethereum Ropsten',
