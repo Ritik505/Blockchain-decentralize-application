@@ -1,18 +1,19 @@
 const axios = require('axios');
 
-class SnowtraceService {
+class EtherscanService {
   constructor() {
-    this.baseUrl = 'https://api-testnet.snowtrace.io/api';
-    this.apiKey = process.env.SNOWTRACE_API_KEY || '';
+    this.baseUrl = ''; 
+    
+    this.apiKey = ''; 
   }
 
-  async fetchContractFromSnowtrace(contractAddress) {
+  async fetchContractFromEtherscan(contractAddress) {
     try {
-      console.log(`Fetching contract from Snowtrace: ${contractAddress}`);
+      console.log(`Fetching contract source code from Etherscan: ${contractAddress}`);
       
       const sourceCodeUrl = `${this.baseUrl}?module=contract&action=getsourcecode&address=${contractAddress}`;
-      const params = this.apiKey ? { apikey: this.apiKey } : {};
-      
+      const params = { apikey: this.apiKey }; 
+
       const response = await axios.get(sourceCodeUrl, { params });
       
       if (response.data.status === '1' && response.data.result && response.data.result[0]) {
@@ -26,20 +27,21 @@ class SnowtraceService {
           return null;
         }
       } else {
-        console.log('Contract not found on Snowtrace');
+        console.log('Contract not found on Etherscan or API error:', response.data.message);
         return null;
       }
     } catch (error) {
-      console.error('Error fetching from Snowtrace:', error.message);
+      console.error('Error fetching from Etherscan:', error.message);
       return null;
     }
   }
 
   async getContractInfo(contractAddress) {
     try {
+      console.log(`Fetching contract info from Etherscan: ${contractAddress}`);
       const url = `${this.baseUrl}?module=contract&action=getsourcecode&address=${contractAddress}`;
-      const params = this.apiKey ? { apikey: this.apiKey } : {};
-      
+      const params = { apikey: this.apiKey };
+
       const response = await axios.get(url, { params });
       
       if (response.data.status === '1' && response.data.result && response.data.result[0]) {
@@ -57,7 +59,7 @@ class SnowtraceService {
           swarmSource: contract.SwarmSource || ''
         };
       }
-      
+      console.log('Contract info not found on Etherscan or API error.');
       return null;
     } catch (error) {
       console.error('Error fetching contract info:', error.message);
@@ -67,15 +69,16 @@ class SnowtraceService {
 
   async getContractABI(contractAddress) {
     try {
+      console.log(`Fetching contract ABI from Etherscan: ${contractAddress}`);
       const url = `${this.baseUrl}?module=contract&action=getabi&address=${contractAddress}`;
-      const params = this.apiKey ? { apikey: this.apiKey } : {};
+      const params = { apikey: this.apiKey };
       
       const response = await axios.get(url, { params });
       
       if (response.data.status === '1' && response.data.result) {
         return JSON.parse(response.data.result);
       }
-      
+      console.log('Contract ABI not found on Etherscan or API error.');
       return null;
     } catch (error) {
       console.error('Error fetching contract ABI:', error.message);
@@ -85,15 +88,16 @@ class SnowtraceService {
 
   async getContractBytecode(contractAddress) {
     try {
+      console.log(`Fetching contract bytecode from Etherscan: ${contractAddress}`);
       const url = `${this.baseUrl}?module=proxy&action=eth_getCode&address=${contractAddress}&tag=latest`;
-      const params = this.apiKey ? { apikey: this.apiKey } : {};
+      const params = { apikey: this.apiKey };
       
       const response = await axios.get(url, { params });
       
-      if (response.data.status === '1' && response.data.result) {
+      if (response.data.result) {
         return response.data.result;
       }
-      
+      console.log('Contract bytecode not found or API error.');
       return null;
     } catch (error) {
       console.error('Error fetching contract bytecode:', error.message);
@@ -103,6 +107,7 @@ class SnowtraceService {
 
   async verifyContractExists(contractAddress) {
     try {
+      console.log(`Verifying contract existence on Etherscan: ${contractAddress}`);
       const bytecode = await this.getContractBytecode(contractAddress);
       return bytecode && bytecode !== '0x';
     } catch (error) {
@@ -113,23 +118,23 @@ class SnowtraceService {
 }
 
 module.exports = {
-  fetchContractFromSnowtrace: async (contractAddress) => {
-    const snowtrace = new SnowtraceService();
-    return await snowtrace.fetchContractFromSnowtrace(contractAddress);
+  fetchContractFromEtherscan: async (contractAddress) => {
+    const etherscan = new EtherscanService();
+    return await etherscan.fetchContractFromEtherscan(contractAddress);
   },
   
   getContractInfo: async (contractAddress) => {
-    const snowtrace = new SnowtraceService();
-    return await snowtrace.getContractInfo(contractAddress);
+    const etherscan = new EtherscanService();
+    return await etherscan.getContractInfo(contractAddress);
   },
   
   getContractABI: async (contractAddress) => {
-    const snowtrace = new SnowtraceService();
-    return await snowtrace.getContractABI(contractAddress);
+    const etherscan = new EtherscanService();
+    return await etherscan.getContractABI(contractAddress);
   },
   
   verifyContractExists: async (contractAddress) => {
-    const snowtrace = new SnowtraceService();
-    return await snowtrace.verifyContractExists(contractAddress);
+    const etherscan = new EtherscanService();
+    return await etherscan.verifyContractExists(contractAddress);
   }
-}; 
+};
